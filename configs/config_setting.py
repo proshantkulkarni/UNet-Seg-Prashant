@@ -11,7 +11,7 @@ class setting_config:
     # network = 'UNet'
     # network = 'ConvKANeXt'
     # network = 'MBUNet'
-    # network = 'mamba_UNet'
+    network = 'mamba_UNet'
     with open('./parsed_args.txt', 'r') as f:
         parsed_args = {}
         for line in f:
@@ -49,6 +49,8 @@ class setting_config:
         data_path = './data/2018DSB/'
     elif datasets == 'PH2':
         data_path = './data/PH2/'
+    elif datasets == 'isic18':
+        data_path = './content/drive/MyDrive/Amit-Paper3/UNeXt-pytorch/inputs/isic'
     else:
         raise Exception('datasets in not right!')
 
