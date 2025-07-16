@@ -50,7 +50,7 @@ class setting_config:
     elif datasets == 'PH2':
         data_path = './data/PH2/'
     elif datasets == 'isic18':
-        data_path = '/content/drive/MyDrive/Amit-Paper3/UNeXt-pytorch/inputs/isic'
+        data_path = './data/ISIC2018/'
     else:
         raise Exception('datasets in not right!')
 
