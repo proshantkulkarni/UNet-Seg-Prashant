@@ -152,18 +152,18 @@ def main(config):
 
 
 
-    # if os.path.exists(resume_model):
-    #     print('#----------Resume Model and Other params----------#')
-    #     checkpoint = torch.load(resume_model, map_location=torch.device('cpu'))
-    #     model.load_state_dict(checkpoint['model_state_dict'])
-    #     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-    #     scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
-    #     saved_epoch = checkpoint['epoch']
-    #     start_epoch += saved_epoch
-    #     min_loss, min_epoch, loss = checkpoint['min_loss'], checkpoint['min_epoch'], checkpoint['loss']
+    if os.path.exists(resume_model):
+        print('#----------Resume Model and Other params----------#')
+        checkpoint = torch.load(resume_model, map_location=torch.device('cpu'))
+        model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
+        saved_epoch = checkpoint['epoch']
+        start_epoch += saved_epoch
+        min_loss, min_epoch, loss = checkpoint['min_loss'], checkpoint['min_epoch'], checkpoint['loss']
 
-    #     log_info = f'resuming model from {resume_model}. resume_epoch: {saved_epoch}, min_loss: {min_loss:.4f}, min_epoch: {min_epoch}, loss: {loss:.4f}'
-    #     logger.info(log_info)
+        log_info = f'resuming model from {resume_model}. resume_epoch: {saved_epoch}, min_loss: {min_loss:.4f}, min_epoch: {min_epoch}, loss: {loss:.4f}'
+        logger.info(log_info)
 
 
 
