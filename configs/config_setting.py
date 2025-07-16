@@ -31,7 +31,7 @@ class setting_config:
         'depths': [2,2,2,2],
         'depths_decoder': [2,2,2,1],
         'drop_path_rate': 0.2,
-        'load_ckpt_path': './pretrained_ckpt/vmamba_small_e238_ema.pth'
+        'load_ckpt_path': None
     }
 
 
