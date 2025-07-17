@@ -147,7 +147,9 @@ def main(config):
     min_miou = 0
     start_epoch = 1
     min_epoch = 1
-
+    early_stop_patience = 50
+    best_val_loss = float('inf')
+    no_improve_counter = 0
 
 
 
@@ -209,6 +211,20 @@ def main(config):
             torch.save(model.state_dict(), os.path.join(checkpoint_dir, 'best.pth'))
             min_miou = miou
             min_epoch = epoch
+
+        
+        if loss < best_val_loss:
+            best_val_loss = loss
+            no_improve_counter = 0
+        else:
+            no_improve_counter += 1
+            logger.info(f"Trigger : {no_improve_counter} / 50")
+
+            if no_improve_counter >= early_stop_patience:
+                logger.info(f"Early stopping triggered at epoch {epoch}")
+                break
+
+        
 
 
         torch.save(
