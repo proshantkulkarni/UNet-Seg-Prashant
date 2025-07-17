@@ -3,7 +3,7 @@ from torch.utils.data import DataLoader
 import timm
 from datasets.dataset import NPY_datasets
 from tensorboardX import SummaryWriter
-
+import time
 
 
 from models.vision_mamba import MambaUnet
@@ -178,6 +178,7 @@ def main(config):
     for epoch in range(start_epoch, config.epochs + 1):
 
         torch.cuda.empty_cache()
+        epoch_start = time.time()
 
         step = train_one_epoch(
             train_loader,
@@ -201,10 +202,14 @@ def main(config):
                 config
             )
 
+        epoch_time = time.time() - epoch_start
+        print(f" Epoch {epoch} time: {epoch_time:.2f} seconds")
+
         if miou > min_miou:
             torch.save(model.state_dict(), os.path.join(checkpoint_dir, 'best.pth'))
             min_miou = miou
             min_epoch = epoch
+
 
         torch.save(
             {
