@@ -63,13 +63,13 @@ class setting_config:
     input_channels = 3
     distributed = False
     local_rank = -1
-    num_workers = 0
+    num_workers = 2
     seed = 42
     world_size = None
     rank = None
     amp = False
     gpu_id = '0'
-    batch_size = 1
+    batch_size = 16
     epochs = 300
 
     work_dir = 'output/' + network + '_' + datasets + '_' + '/'

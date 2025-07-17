@@ -22,7 +22,7 @@ from engine import *
 import os
 import sys
 from utils import *
-
+from pprint import pprint
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -71,7 +71,7 @@ def main(config):
 
     log_config_info(config, logger)
 
-
+    
 
 
 
@@ -244,4 +244,6 @@ def main(config):
 
 if __name__ == '__main__':
     config = setting_config
+    print("\n=== Config Settings ===")
+    pprint({k: v for k, v in vars(config).items() if not k.startswith('__')})
     main(config)
