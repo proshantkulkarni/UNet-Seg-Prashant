@@ -168,6 +168,7 @@ def main(config):
 
         log_info = f'resuming model from {resume_model}. resume_epoch: {saved_epoch}, min_loss: {min_loss:.4f}, min_epoch: {min_epoch}, loss: {loss:.4f}'
         logger.info(log_info)
+        print('#----------Resume Model Successful----------#')
 
 
 
