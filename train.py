@@ -161,7 +161,10 @@ def main(config):
         scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
         saved_epoch = checkpoint['epoch']
         start_epoch += saved_epoch
-        min_loss, min_epoch, loss = checkpoint['min_loss'], checkpoint['min_epoch'], checkpoint['loss']
+        # min_loss, min_epoch, loss = checkpoint['min_loss'], checkpoint['min_epoch'], checkpoint['loss']
+        min_loss = checkpoint.get('min_loss', 999)
+        min_epoch = checkpoint.get('min_epoch', 1)
+        loss = checkpoint.get('loss', 1.0)
 
         log_info = f'resuming model from {resume_model}. resume_epoch: {saved_epoch}, min_loss: {min_loss:.4f}, min_epoch: {min_epoch}, loss: {loss:.4f}'
         logger.info(log_info)
@@ -211,6 +214,16 @@ def main(config):
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
             }, os.path.join(checkpoint_dir, 'latest.pth')) 
+
+        # torch.save({
+        #     'epoch': epoch,
+        #     'min_epoch': min_epoch,
+        #     'min_loss': min_loss,
+        #     'loss': loss,
+        #     'model_state_dict': model.state_dict(),
+        #     'optimizer_state_dict': optimizer.state_dict(),
+        #     'scheduler_state_dict': scheduler.state_dict(),
+        #     }, os.path.join(checkpoint_dir, 'latest.pth'))
 
     if os.path.exists(os.path.join(checkpoint_dir, 'best.pth')):
         print('#----------Testing----------#')
