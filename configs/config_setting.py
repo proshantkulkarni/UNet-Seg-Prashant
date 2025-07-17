@@ -69,7 +69,7 @@ class setting_config:
     rank = None
     amp = False
     gpu_id = '0'
-    batch_size = 16
+    batch_size = 8
     epochs = 300
 
     work_dir = 'output/' + network + '_' + datasets + '_' + '/'
