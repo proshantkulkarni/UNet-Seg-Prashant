@@ -206,6 +206,7 @@ def main(config):
 
         epoch_time = time.time() - epoch_start
         print(f" Epoch {epoch} time: {epoch_time:.2f} seconds")
+        print(f" Trigger : {no_improve_counter} / 50")
 
         if miou > min_miou:
             torch.save(model.state_dict(), os.path.join(checkpoint_dir, 'best.pth'))
