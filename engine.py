@@ -75,9 +75,6 @@ def train_one_epoch(train_loader,
             except Exception as e:
                 print(f"⚠️ Could not fetch GPU stats: {e}")
 
-            
-            
-
 
     scheduler.step() 
     return step
