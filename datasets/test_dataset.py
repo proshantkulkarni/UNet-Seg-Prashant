@@ -18,14 +18,34 @@ class Test_datasets(Dataset):
     def __init__(self, path_Data, config):
         super(Test_datasets, self)
         
+        image_dir = os.path.join(path_Data, 'test/images/')
+        mask_dir = os.path.join(path_Data, 'test/masks/')
+
+        image_files = sorted(os.listdir(image_dir))
+        mask_files = sorted(os.listdir(mask_dir))
+
+        image_basenames = set(os.path.splitext(f)[0] for f in image_files)
+        mask_basenames = set(os.path.splitext(f)[0] for f in mask_files)
+    
+        common_basenames = sorted(list(image_basenames & mask_basenames))
+
         images_list = sorted(os.listdir(path_Data+'test/images/'))
         masks_list = sorted(os.listdir(path_Data+'test/masks/'))
+
         self.data = []
-        for i in range(len(images_list)):
-            img_path = path_Data+'test/images/' + images_list[i]
-            mask_path = path_Data+'test/masks/' + masks_list[i]
-            self.data.append([img_path, mask_path])
+        # for i in range(len(images_list)):
+        #     img_path = path_Data+'test/images/' + images_list[i]
+        #     mask_path = path_Data+'test/masks/' + masks_list[i]
+        #     self.data.append([img_path, mask_path])
+
+        for base in common_basenames:
+            img_path = os.path.join(image_dir, base + '.png')
+            mask_path = os.path.join(mask_dir, base + '.png')
+            if os.path.exists(img_path) and os.path.exists(mask_path):
+                self.data.append([img_path, mask_path])
+                
         self.transformer = config.test_transformer
+        print(f" Loaded {len(self.data)} test samples.")
         
     def __getitem__(self, indx):
         img_path, msk_path = self.data[indx]
