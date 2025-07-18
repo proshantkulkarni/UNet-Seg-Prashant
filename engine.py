@@ -6,6 +6,9 @@ from sklearn.metrics import confusion_matrix
 from utils import save_imgs
 import cv2
 import subprocess
+import os
+import pynvml
+
 
 
 def train_one_epoch(train_loader,
@@ -25,6 +28,10 @@ def train_one_epoch(train_loader,
     model.train() 
  
     loss_list = []
+    pynvml.nvmlInit()
+    handle = pynvml.nvmlDeviceGetHandleByIndex(0)  # GPU 0
+    pid = os.getpid()
+
 
     for iter, data in enumerate(train_loader):
         step += iter
@@ -66,7 +73,16 @@ def train_one_epoch(train_loader,
                 print(f"🟢 GPU Utilization: {util}% | Memory: {mem_used} / {mem_total} MiB")
             except Exception as e:
                 print(f"⚠️ Could not fetch GPU stats: {e}")
-                
+
+            # Check GPU memory used by this process
+            procs = pynvml.nvmlDeviceGetComputeRunningProcesses(handle)
+            for p in procs:
+                if p.pid == pid:
+                    print(f"🟢 GPU memory used by this process: {p.usedGpuMemory / 1024**2:.2f} MB")
+                    break
+            else:
+                print("⚠️ This process not found on GPU. Possibly not using GPU yet.")
+
     scheduler.step() 
     return step
 
