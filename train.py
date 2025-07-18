@@ -97,7 +97,8 @@ def main(config):
                                 batch_size=config.batch_size, 
                                 shuffle=True,
                                 pin_memory=True,
-                                num_workers=config.num_workers)
+                                num_workers=config.num_workers,
+                                persistent_workers=True)
     val_dataset = NPY_datasets(config.data_path, config, train=False)
     val_loader = DataLoader(val_dataset,
                                 batch_size=1,

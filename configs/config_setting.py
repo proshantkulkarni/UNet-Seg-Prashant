@@ -63,7 +63,7 @@ class setting_config:
     input_channels = 3
     distributed = False
     local_rank = -1
-    num_workers = 2
+    num_workers = 8
     seed = 42
     world_size = None
     rank = None
