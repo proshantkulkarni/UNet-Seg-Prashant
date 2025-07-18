@@ -62,7 +62,7 @@ def train_one_epoch(train_loader,
         if iter % config.print_interval == 0:
             log_info = f'train: epoch {epoch}, iter:{iter}, loss: {np.mean(loss_list):.4f}, lr: {now_lr}'
             print(log_info)
-            print(f"torch.cuda.memory_allocated: {torch.cuda.memory_allocated() / 1024**2:.2f} MB")
+            # print(f"torch.cuda.memory_allocated: {torch.cuda.memory_allocated() / 1024**2:.2f} MB")
             logger.info(log_info)
 
             try:
@@ -71,7 +71,7 @@ def train_one_epoch(train_loader,
                 )
                 gpu_stat = gpu_stat.decode("utf-8").strip().split('\n')[0]
                 util, mem_used, mem_total = gpu_stat.split(', ')
-                print(f"🟢 GPU Utilization: {util}% | Memory: {mem_used} / {mem_total} MiB")
+                # print(f"🟢 GPU Utilization: {util}% | Memory: {mem_used} / {mem_total} MiB")
             except Exception as e:
                 print(f"⚠️ Could not fetch GPU stats: {e}")
 
