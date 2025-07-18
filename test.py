@@ -5,7 +5,7 @@ from datasets.dataset import NPY_datasets
 from datasets.test_dataset import Test_datasets
 from tensorboardX import SummaryWriter
 from models.vision_mamba import MambaUnet
-from models.ConvKANeXt import ConvKANeXt as KANUSeg
+# from models.ConvKANeXt import ConvKANeXt as KANUSeg
 from models.UNet import UNet
 from models.ATTUNet import AttU_Net
 from models.DenseUnet import Dense_Unet as DenseUnet
