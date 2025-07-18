@@ -30,7 +30,7 @@ class Test_datasets(Dataset):
         
     def __getitem__(self, indx):
         img_path, msk_path = self.data[indx]
-        print(img_path)
+        # print(img_path)
         # img = np.array(Image.open(img_path).convert('RGB'))
         img_BGR = cv2.imread(img_path, 1)
         img_RGB = cv2.cvtColor(img_BGR, cv2.COLOR_BGR2RGB)
