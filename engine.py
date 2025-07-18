@@ -5,6 +5,8 @@ from torch.cuda.amp import autocast as autocast
 from sklearn.metrics import confusion_matrix
 from utils import save_imgs
 import cv2
+import subprocess
+
 
 def train_one_epoch(train_loader,
                     model,
@@ -54,6 +56,17 @@ def train_one_epoch(train_loader,
             log_info = f'train: epoch {epoch}, iter:{iter}, loss: {np.mean(loss_list):.4f}, lr: {now_lr}'
             print(log_info)
             logger.info(log_info)
+
+            try:
+                gpu_stat = subprocess.check_output(
+                    ["nvidia-smi", "--query-gpu=utilization.gpu,memory.used,memory.total", "--format=csv,nounits,noheader"]
+                )
+                gpu_stat = gpu_stat.decode("utf-8").strip().split('\n')[0]
+                util, mem_used, mem_total = gpu_stat.split(', ')
+                print(f"🟢 GPU Utilization: {util}% | Memory: {mem_used} / {mem_total} MiB")
+            except Exception as e:
+                print(f"⚠️ Could not fetch GPU stats: {e}")
+                
     scheduler.step() 
     return step
 
