@@ -44,7 +44,7 @@ class setting_config:
     elif datasets == 'CVC-ClinicDB':
         data_path = './data/CVC-ClinicDB/'
     elif datasets == 'Kvasir-SEG':
-        data_path = './data/Kvasir-SEG/'
+        data_path = '/content/drive/MyDrive/Akanksha/polyp_pvt/Polyp-PVT/data/Kvasir-SEG/'
     elif datasets == '2018DSB':
         data_path = './data/2018DSB/'
     elif datasets == 'PH2':

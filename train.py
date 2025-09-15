@@ -13,7 +13,7 @@ from models.ATTUNet import AttU_Net
 from models.DenseUnet import Dense_Unet as DenseUnet
 from models.SwinUnet import SwinUnet, SwinUnet_config
 from models.TransUnet import get_transNet as TransUNet
-from models.ConvUNext import ConvUNeXt
+# from models.ConvUNext import ConvUNeXt
 
 
 
@@ -278,3 +278,5 @@ if __name__ == '__main__':
     print("\n=== Config Settings ===")
     pprint({k: v for k, v in vars(config).items() if not k.startswith('__')})
     main(config)
+
+    # CUDA_VISIBLE_DEVICES=0 python -u train.py --network mamba_UNet --datasets Kvasir-SEG
