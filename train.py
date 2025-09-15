@@ -153,9 +153,10 @@ def main(config):
     print('#----------Set other params----------#')
     min_loss = 999
     min_miou = 0
+    max_dice = 0
     start_epoch = 1
     min_epoch = 1
-    early_stop_patience = 50
+    early_stop_patience = 30
     best_val_loss = float('inf')
     no_improve_counter = 0
 
@@ -203,7 +204,7 @@ def main(config):
             writer
         )
 
-        loss,miou = val_one_epoch(
+        loss,miou, dsc = val_one_epoch(
                 val_loader,
                 model,
                 criterion,
@@ -216,14 +217,15 @@ def main(config):
         print(f" Epoch {epoch} time: {epoch_time:.2f} seconds")
         print(f" Trigger : {no_improve_counter} / 50")
 
-        if miou > min_miou:
+        if dsc > max_dice:
             torch.save(model.state_dict(), os.path.join(checkpoint_dir, 'best.pth'))
-            min_miou = miou
+            max_dice = dsc
+            # minmax_dice = dsc_miou = miou
             min_epoch = epoch
 
         
-        if loss < best_val_loss:
-            best_val_loss = loss
+        if dsc > max_dice:
+            max_dice = dsc
             no_improve_counter = 0
         else:
             no_improve_counter += 1
@@ -269,7 +271,7 @@ def main(config):
             )
         os.rename(
             os.path.join(checkpoint_dir, 'best.pth'),
-            os.path.join(checkpoint_dir, f'best-epoch{min_epoch}-miou{min_miou:.4f}.pth')
+            os.path.join(checkpoint_dir, f'best-epoch{min_epoch}-dice{max_dice:.4f}.pth')
         )      
 
 
