@@ -46,7 +46,8 @@ class setting_config:
         # data_path = '/content/drive/MyDrive/Akanksha/PFNET_2_2_8_2/PFNet/data/CVC-ColonDB/'
     elif datasets == 'Kvasir-SEG':
         # data_path = '/content/drive/MyDrive/Akanksha/polyp_pvt/Polyp-PVT/data/Kvasir-SEG/'
-        data_path = '/content/drive/MyDrive/Akanksha/PFNET_2_2_8_2/PFNet/data/CVC-ColonDB/'
+        # data_path = '/content/drive/MyDrive/Akanksha/PFNET_2_2_8_2/PFNet/data/CVC-ColonDB/'
+        data_path = '/content/drive/MyDrive/Akanksha/PFNET_2_2_8_2/PFNet/data/ETIS-LaribPolypDB/'
     elif datasets == '2018DSB':
         data_path = './data/2018DSB/'
     elif datasets == 'PH2':
