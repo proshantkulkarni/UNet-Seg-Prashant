@@ -97,10 +97,10 @@ class NPY_datasets_test(Dataset):
     def __init__(self, path_Data, config, test=True):
         super().__init__()
         split = 'test' if test else 'val'
-        # img_dir = os.path.join(path_Data, split, 'images')
-        # msk_dir = os.path.join(path_Data, split, 'masks')
-        img_dir = os.path.join(path_Data,  'images')
-        msk_dir = os.path.join(path_Data,  'masks')
+        img_dir = os.path.join(path_Data, split, 'images')
+        msk_dir = os.path.join(path_Data, split, 'masks')
+        # img_dir = os.path.join(path_Data,  'images')
+        # msk_dir = os.path.join(path_Data,  'masks')
         img_map = _files_by_stem(img_dir, IMG_EXTS)
         msk_map = _files_by_stem(msk_dir, MSK_EXTS)
         common = sorted(set(img_map) & set(msk_map))
