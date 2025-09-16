@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import DataLoader
 import timm
-from datasets.dataset import NPY_datasets
+from datasets.dataset import NPY_datasets, NPY_datasets_test
 from tensorboardX import SummaryWriter
 import time
 
@@ -92,26 +92,28 @@ def main(config):
 
 
     print('#----------Preparing dataset----------#')
-    train_dataset = NPY_datasets(config.data_path, config, train=True)
-    train_loader = DataLoader(train_dataset,
-                                batch_size=config.batch_size, 
-                                shuffle=True,
-                                pin_memory=True,
-                                num_workers=config.num_workers,
-                                persistent_workers=True)
-    val_dataset = NPY_datasets(config.data_path, config, train=False)
-    val_loader = DataLoader(val_dataset,
-                                batch_size=1,
-                                shuffle=False,
-                                pin_memory=True, 
-                                num_workers=config.num_workers,
-                                drop_last=True)
+    # train_dataset = NPY_datasets(config.data_path, config, train=True)
+    # train_loader = DataLoader(train_dataset,
+    #                             batch_size=config.batch_size, 
+    #                             shuffle=True,
+    #                             pin_memory=True,
+    #                             num_workers=config.num_workers,
+    #                             persistent_workers=True)
+    # val_dataset = NPY_datasets(config.data_path, config, train=False)
+    # val_loader = DataLoader(val_dataset,
+    #                             batch_size=1,
+    #                             shuffle=False,
+    #                             pin_memory=True, 
+    #                             num_workers=config.num_workers,
+    #                             drop_last=True)
 
 
 
 
     print('#----------Prepareing Model----------#')
     
+    print(f"Using model: {config.network}")
+
     if config.network == 'mamba_UNet':
         model_cfg = config.model_config
         model = MambaUnet(model_cfg,128,1)
@@ -163,116 +165,126 @@ def main(config):
 
 
 
-    if os.path.exists(resume_model):
-        print('#----------Resume Model and Other params----------#')
-        # checkpoint = torch.load(resume_model, map_location=torch.device('cpu'))
-        checkpoint = torch.load(resume_model, map_location=torch.device('cpu'), weights_only=False)
-        model.load_state_dict(checkpoint['model_state_dict'])
-        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-        scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
-        saved_epoch = checkpoint['epoch']
-        start_epoch += saved_epoch
-        # min_loss, min_epoch, loss = checkpoint['min_loss'], checkpoint['min_epoch'], checkpoint['loss']
-        min_loss = checkpoint.get('min_loss', 999)
-        min_epoch = checkpoint.get('min_epoch', 1)
-        loss = checkpoint.get('loss', 1.0)
+    # if os.path.exists(resume_model):
+    #     print('#----------Resume Model and Other params----------#')
+    #     # checkpoint = torch.load(resume_model, map_location=torch.device('cpu'))
+    #     checkpoint = torch.load(resume_model, map_location=torch.device('cpu'), weights_only=False)
+    #     model.load_state_dict(checkpoint['model_state_dict'])
+    #     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    #     scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
+    #     saved_epoch = checkpoint['epoch']
+    #     start_epoch += saved_epoch
+    #     # min_loss, min_epoch, loss = checkpoint['min_loss'], checkpoint['min_epoch'], checkpoint['loss']
+    #     min_loss = checkpoint.get('min_loss', 999)
+    #     min_epoch = checkpoint.get('min_epoch', 1)
+    #     loss = checkpoint.get('loss', 1.0)
 
-        log_info = f'resuming model from {resume_model}. resume_epoch: {saved_epoch}, min_loss: {min_loss:.4f}, min_epoch: {min_epoch}, loss: {loss:.4f}'
-        logger.info(log_info)
-        print('#----------Resume Model Successful----------#')
+    #     log_info = f'resuming model from {resume_model}. resume_epoch: {saved_epoch}, min_loss: {min_loss:.4f}, min_epoch: {min_epoch}, loss: {loss:.4f}'
+    #     logger.info(log_info)
+    #     print('#----------Resume Model Successful----------#')
 
 
 
 
     step = 0
     print('#----------Training----------#')
-    for epoch in range(start_epoch, config.epochs + 1):
+    # for epoch in range(start_epoch, config.epochs + 1):
 
-        torch.cuda.empty_cache()
-        epoch_start = time.time()
+    #     torch.cuda.empty_cache()
+    #     epoch_start = time.time()
 
-        step = train_one_epoch(
-            train_loader,
-            model,
-            criterion,
-            optimizer,
-            scheduler,
-            epoch,
-            step,
-            logger,
-            config,
-            writer
-        )
+    #     step = train_one_epoch(
+    #         train_loader,
+    #         model,
+    #         criterion,
+    #         optimizer,
+    #         scheduler,
+    #         epoch,
+    #         step,
+    #         logger,
+    #         config,
+    #         writer
+    #     )
 
-        loss,miou, dsc = val_one_epoch(
-                val_loader,
-                model,
-                criterion,
-                epoch,
-                logger,
-                config
-            )
+    #     loss,miou, dsc = val_one_epoch(
+    #             val_loader,
+    #             model,
+    #             criterion,
+    #             epoch,
+    #             logger,
+    #             config
+    #         )
 
-        epoch_time = time.time() - epoch_start
-        print(f" Epoch {epoch} time: {epoch_time:.2f} seconds")
-        print(f" Trigger : {no_improve_counter} / 50")
+    #     epoch_time = time.time() - epoch_start
+    #     print(f" Epoch {epoch} time: {epoch_time:.2f} seconds")
+    #     print(f" Trigger : {no_improve_counter} / 50")
 
-        if dsc > max_dice:
-            torch.save(model.state_dict(), os.path.join(checkpoint_dir, 'best.pth'))
-            max_dice = dsc
-            # minmax_dice = dsc_miou = miou
-            min_epoch = epoch
-
-        
-        if dsc > max_dice:
-            max_dice = dsc
-            no_improve_counter = 0
-        else:
-            no_improve_counter += 1
-            logger.info(f"Trigger : {no_improve_counter} / 50")
-
-            if no_improve_counter >= early_stop_patience:
-                logger.info(f"Early stopping triggered at epoch {epoch}")
-                break
+    #     if dsc > max_dice:
+    #         torch.save(model.state_dict(), os.path.join(checkpoint_dir, 'best.pth'))
+    #         max_dice = dsc
+    #         # minmax_dice = dsc_miou = miou
+    #         min_epoch = epoch
 
         
+    #     if dsc > max_dice:
+    #         max_dice = dsc
+    #         no_improve_counter = 0
+    #     else:
+    #         no_improve_counter += 1
+    #         logger.info(f"Trigger : {no_improve_counter} / 50")
+
+    #         if no_improve_counter >= early_stop_patience:
+    #             logger.info(f"Early stopping triggered at epoch {epoch}")
+    #             break
+
+        
 
 
-        torch.save(
-            {
-                'epoch': epoch,
-                'min_epoch': min_epoch,
-                'loss': loss,
-                'model_state_dict': model.state_dict(),
-                'optimizer_state_dict': optimizer.state_dict(),
-                'scheduler_state_dict': scheduler.state_dict(),
-            }, os.path.join(checkpoint_dir, 'latest.pth')) 
+    #     torch.save(
+    #         {
+    #             'epoch': epoch,
+    #             'min_epoch': min_epoch,
+    #             'loss': loss,
+    #             'model_state_dict': model.state_dict(),
+    #             'optimizer_state_dict': optimizer.state_dict(),
+    #             'scheduler_state_dict': scheduler.state_dict(),
+    #         }, os.path.join(checkpoint_dir, 'latest.pth')) 
 
-        # torch.save({
-        #     'epoch': epoch,
-        #     'min_epoch': min_epoch,
-        #     'min_loss': min_loss,
-        #     'loss': loss,
-        #     'model_state_dict': model.state_dict(),
-        #     'optimizer_state_dict': optimizer.state_dict(),
-        #     'scheduler_state_dict': scheduler.state_dict(),
-        #     }, os.path.join(checkpoint_dir, 'latest.pth'))
+    #     # torch.save({
+    #     #     'epoch': epoch,
+    #     #     'min_epoch': min_epoch,
+    #     #     'min_loss': min_loss,
+    #     #     'loss': loss,
+    #     #     'model_state_dict': model.state_dict(),
+    #     #     'optimizer_state_dict': optimizer.state_dict(),
+    #     #     'scheduler_state_dict': scheduler.state_dict(),
+    #     #     }, os.path.join(checkpoint_dir, 'latest.pth'))
 
     if os.path.exists(os.path.join(checkpoint_dir, 'best.pth')):
         print('#----------Testing----------#')
-        best_weight = torch.load(config.work_dir + 'checkpoints/best.pth', map_location=torch.device('cpu'))
+        test_dataset = NPY_datasets_test(config.data_path, config, test=True)
+        test_loader = DataLoader(test_dataset,
+                            batch_size=1,
+                            shuffle=False,
+                            pin_memory=True, 
+                            num_workers=config.num_workers,
+                            drop_last=True)
+        
+        # best_weight = torch.load(config.work_dir + 'checkpoints/best.pth', map_location=torch.device('cpu'))
+        best_weight = torch.load('/content/drive/MyDrive/Prashant/UNet-Seg-Prashant/output/mamba_UNet_Kvasir-SEG_/checkpoints/best-epoch29-dice0.7801.pth', map_location=torch.device('cpu'))
+
         model.load_state_dict(best_weight)
         loss = test_one_epoch(
-                val_loader,
+                test_loader,
                 model,
                 criterion,
                 logger,
                 config,
             )
-        os.rename(
-            os.path.join(checkpoint_dir, 'best.pth'),
-            os.path.join(checkpoint_dir, f'best-epoch{min_epoch}-dice{max_dice:.4f}.pth')
-        )      
+        # os.rename(
+        #     os.path.join(checkpoint_dir, 'best.pth'),
+        #     os.path.join(checkpoint_dir, f'best-epoch{min_epoch}-dice{max_dice:.4f}.pth')
+        # )      
 
 
 if __name__ == '__main__':
