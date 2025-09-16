@@ -11,7 +11,7 @@ from models.ATTUNet import AttU_Net
 from models.DenseUnet import Dense_Unet as DenseUnet
 from models.SwinUnet import SwinUnet, SwinUnet_config
 from models.TransUnet import get_transNet as TransUNet
-from models.ConvUNext import ConvUNeXt
+# from models.ConvUNext import ConvUNeXt
 # from models.mamba_sys import VSSM
 import argparse
 from engine import *

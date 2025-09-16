@@ -18,8 +18,10 @@ class Test_datasets(Dataset):
     def __init__(self, path_Data, config):
         super(Test_datasets, self)
         
-        images_list = sorted(os.listdir(path_Data+'test/images/'))
-        masks_list = sorted(os.listdir(path_Data+'test/masks/'))
+        # images_list = sorted(os.listdir(path_Data+'test/images/'))
+        # masks_list = sorted(os.listdir(path_Data+'test/masks/'))
+        images_list = sorted(os.listdir(path_Data+'images/'))
+        masks_list = sorted(os.listdir(path_Data+'masks/'))
         self.data = []
         for i in range(len(images_list)):
             img_path = path_Data+'test/images/' + images_list[i]
