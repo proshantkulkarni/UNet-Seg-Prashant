@@ -92,20 +92,20 @@ def main(config):
 
 
     print('#----------Preparing dataset----------#')
-    train_dataset = NPY_datasets(config.data_path, config, train=True)
-    train_loader = DataLoader(train_dataset,
-                                batch_size=config.batch_size, 
-                                shuffle=True,
-                                pin_memory=True,
-                                num_workers=config.num_workers,
-                                persistent_workers=True)
-    val_dataset = NPY_datasets(config.data_path, config, train=False)
-    val_loader = DataLoader(val_dataset,
-                                batch_size=1,
-                                shuffle=False,
-                                pin_memory=True, 
-                                num_workers=config.num_workers,
-                                drop_last=True)
+    # train_dataset = NPY_datasets(config.data_path, config, train=True)
+    # train_loader = DataLoader(train_dataset,
+    #                             batch_size=config.batch_size, 
+    #                             shuffle=True,
+    #                             pin_memory=True,
+    #                             num_workers=config.num_workers,
+    #                             persistent_workers=True)
+    # val_dataset = NPY_datasets(config.data_path, config, train=False)
+    # val_loader = DataLoader(val_dataset,
+    #                             batch_size=1,
+    #                             shuffle=False,
+    #                             pin_memory=True, 
+    #                             num_workers=config.num_workers,
+    #                             drop_last=True)
 
 
 
