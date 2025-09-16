@@ -123,7 +123,8 @@ model = model.cuda()
 cal_params_flops(model, 224, logger)
 print('#----------Testing----------#')
 # best_weight = torch.load(os.path.join(checkpoint_dir, 'best.pth'), map_location=torch.device('cpu'))
-best_weight = '/content/drive/MyDrive/Prashant/UNet-Seg-Prashant/output/mamba_UNet_Kvasir-SEG_/checkpoints/best-epoch29-dice0.7801.pth'
+best_weight = torch.load('/content/drive/MyDrive/Prashant/UNet-Seg-Prashant/output/mamba_UNet_Kvasir-SEG_/checkpoints/best-epoch29-dice0.7801.pth', map_location=torch.device('cpu'))
+
 model.load_state_dict(best_weight)
 model.eval()
 preds = []
